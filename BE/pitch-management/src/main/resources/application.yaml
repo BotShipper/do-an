@@ -1,0 +1,31 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /pitch-management/api
+
+spring:
+  application:
+    name: pitch-management
+  main:
+    # Turn off spring boot banner
+    banner-mode: off
+  datasource:
+    url: "jdbc:mysql://localhost:3306/pitch_management"
+    username: root
+    password: 123456789
+  jpa:
+    show-sql: true
+
+logging:
+  level:
+    org:
+      # Show JPA/Hibernate logging messages
+      hibernate:
+        SQL: trace
+        orm:
+          jdbc:
+            bind: trace
+
+jwt:
+  signer_key: "rk+ktvUW0jEoDtfP5baDLOEDcfYyyrN1FsQTPAM+E7v53yvim1AXFi4+TOx+X0K9"
+  expiration_time: 3600 # 1 hours
