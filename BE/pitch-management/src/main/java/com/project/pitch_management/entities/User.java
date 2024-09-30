@@ -27,37 +27,15 @@ public class User implements UserDetails {
     @Column(name = "id")
     Long id;
 
-    @Column(name = "email", unique = true)
     String email;
-
-    @Column(name = "password")
     String password;
-
-    @Column(name = "full_name")
     String fullName;
-
-    @Column(name = "phone")
     String phone;
-
-    @Column(name = "address")
     String address;
-
-    @Column(name = "avatar")
     String avatar;
-
-    @Column(name = "role")
     String role;
-
-    @Column(name = "create_at")
     LocalDateTime createAt;
-
-    @Column(name = "update_at")
     LocalDateTime updateAt;
-
-//    @OneToMany(mappedBy = "user",
-//            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-//    @ToString.Exclude
-//    List<BookPitch> bookPitches;
 
     //------------------------------------------------------------------
     // Authentication

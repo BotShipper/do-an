@@ -1,6 +1,5 @@
 package com.project.pitch_management.dto.responses;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -16,7 +15,6 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class PitchResponse {
 
     Long id;
@@ -27,6 +25,6 @@ public class PitchResponse {
     LocalDateTime createAt;
     LocalDateTime updateAt;
 
-    List<BookPitchResponse> bookPitchResponses;
-    List<PitchTimeSlotResponse> pitchTimeSlotResponses;
+    List<BookPitchResponse> bookPitches;
+    List<PitchTimeSlotResponse> pitchTimeSlots;
 }

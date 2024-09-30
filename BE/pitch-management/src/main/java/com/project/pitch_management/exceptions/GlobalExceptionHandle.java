@@ -1,4 +1,4 @@
-package com.project.pitch_management.exception;
+package com.project.pitch_management.exceptions;
 
 import com.project.pitch_management.dto.responses.ApiResponse;
 import lombok.extern.slf4j.Slf4j;

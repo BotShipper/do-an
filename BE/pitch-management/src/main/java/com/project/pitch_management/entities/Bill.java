@@ -22,17 +22,11 @@ public class Bill {
     @Column(name = "id")
     Long id;
 
-    @Column(name = "price")
     Double price;
-
-    @Column(name = "pay_method")
     String payMethod;
-
-    @Column(name = "create_at")
     LocalDateTime createAt;
 
-    @OneToOne(optional = false,
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @OneToOne
     @JoinColumn(name = "book_pitch_id")
     BookPitch bookPitch;
 }

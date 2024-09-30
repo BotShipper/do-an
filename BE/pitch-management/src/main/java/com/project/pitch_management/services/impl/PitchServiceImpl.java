@@ -2,11 +2,13 @@ package com.project.pitch_management.services.impl;
 
 import com.project.pitch_management.dto.requests.PitchRequest;
 import com.project.pitch_management.dto.responses.PitchResponse;
-import com.project.pitch_management.entities.BookPitch;
+import com.project.pitch_management.dto.responses.PitchTimeSlotResponse;
 import com.project.pitch_management.entities.Pitch;
+import com.project.pitch_management.entities.PitchTimeSlot;
 import com.project.pitch_management.mappers.PitchMapper;
 import com.project.pitch_management.repositories.BookPitchRepository;
 import com.project.pitch_management.repositories.PitchRepository;
+import com.project.pitch_management.repositories.PitchTimeSlotRepository;
 import com.project.pitch_management.repositories.TimeSlotRepository;
 import com.project.pitch_management.services.PitchService;
 import jakarta.transaction.Transactional;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -32,6 +35,7 @@ public class PitchServiceImpl implements PitchService {
     PitchRepository pitchRepository;
     TimeSlotRepository timeSlotRepository;
     BookPitchRepository bookPitchRepository;
+    PitchTimeSlotRepository pitchTimeSlotRepository;
 
     @Override
     public PitchResponse createPitch(PitchRequest request) {
@@ -59,37 +63,29 @@ public class PitchServiceImpl implements PitchService {
 
         Pitch pitch = pitchRepository.findById(id).orElseThrow();
 
-
         return pitchMapper.toPitchResponse(pitch);
     }
 
     @Override
-    public PitchResponse getPitchByIdAndDate(long id, LocalDate date) {
+    public PitchResponse getAvailableTimeSlots(long id, LocalDate dateBook) {
 
-        Pitch pitch = pitchRepository.findById(id).orElseThrow();
+        List<PitchTimeSlot> allTimeSlots = pitchTimeSlotRepository.findAllPitchTimeSlotsByPitch(id);
+        List<Long> bookedTimeSlotIds = bookPitchRepository.findBookedTimeSlotIds(id, dateBook);
+        PitchResponse response = getPitchById(id);
 
-        // Lọc các bookPitches theo dateBook
-        List<BookPitch> filteredBookPitches = pitch.getBookPitches().stream()
-                .filter(bp -> bp.getDateBook().equals(date))
-                .toList();
+        List<PitchTimeSlotResponse> result = new ArrayList<>();
+        for (PitchTimeSlot pitchTimeSlot : allTimeSlots) {
+            String status = bookedTimeSlotIds.contains(pitchTimeSlot.getTimeSlot().getId()) ? "Booked" : "Available";
+            result.add(PitchTimeSlotResponse.builder()
+                    .price(pitchTimeSlot.getPrice())
+                    .startTime(pitchTimeSlot.getTimeSlot().getStartTime())
+                    .endTime(pitchTimeSlot.getTimeSlot().getEndTime())
+                    .status(status)
+                    .build());
+        }
 
-        pitch.setBookPitches(filteredBookPitches);
+        response.setPitchTimeSlots(result);
 
-//        // Duyệt qua các PitchTimeSlots và gán TimeSlot cho mỗi PitchTimeSlot
-//        List<PitchTimeSlot> updatedPitchTimeSlots = pitch.getPitchTimeSlots().stream()
-//                .map(pitchTimeSlot -> {
-//                    TimeSlot timeSlot = timeSlotRepository.findById(pitchTimeSlot.getTimeSlot().getId())
-//                            .orElseThrow();
-//                    pitchTimeSlot.setTimeSlot(timeSlot);  // Gán TimeSlot cho PitchTimeSlot
-//                    return pitchTimeSlot;  // Trả về PitchTimeSlot đã cập nhật
-//                })
-//                .toList();  // Thu thập kết quả thành danh sách mới
-//
-//        // Gán danh sách PitchTimeSlots đã cập nhật lại vào Pitch
-//        pitch.setPitchTimeSlots(updatedPitchTimeSlots);
-
-        PitchResponse response = pitchMapper.toPitchResponse(pitch);
-
-        return null;
+        return response;
     }
 }

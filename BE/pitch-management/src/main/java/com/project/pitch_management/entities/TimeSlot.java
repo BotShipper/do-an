@@ -1,12 +1,10 @@
 package com.project.pitch_management.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -24,21 +22,6 @@ public class TimeSlot {
     @Column(name = "id")
     Long id;
 
-    @Column(name = "start_time")
     LocalTime startTime;
-
-    @Column(name = "end_time")
     LocalTime endTime;
-
-    @OneToMany(mappedBy = "timeSlot",
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @ToString.Exclude
-    @JsonManagedReference
-    List<BookPitch> bookPitches;
-
-    @OneToMany(mappedBy = "timeSlot",
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @ToString.Exclude
-    @JsonManagedReference
-    List<PitchTimeSlot> pitchTimeSlots;
 }

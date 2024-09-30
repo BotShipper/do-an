@@ -28,24 +28,14 @@ public class PitchControllerPublic {
 
         return ResponseEntity.ok().body(apiResponse);
     }
+    
+    @GetMapping("/{pitchId}/available-timeslots")
+    public ResponseEntity<ApiResponse> getAvailableTimeSlots(@PathVariable Long pitchId, @RequestParam LocalDate dateBook) {
 
-    @GetMapping("/{pitchId}")
-    public ResponseEntity<ApiResponse> getPitchById(@PathVariable(name = "pitchId") long id) {
         ApiResponse apiResponse = ApiResponse.builder()
                 .status(200)
-                .message("Created pitch success")
-                .result(pitchService.getPitchById(id))
-                .build();
-
-        return ResponseEntity.ok().body(apiResponse);
-    }
-
-    @GetMapping("/test/{pitchId}")
-    public ResponseEntity<ApiResponse> getPitchByIdAnDate(@PathVariable(name = "pitchId") long id, @RequestParam LocalDate date) {
-        ApiResponse apiResponse = ApiResponse.builder()
-                .status(200)
-                .message("Created pitch success")
-                .result(pitchService.getPitchByIdAndDate(id, date))
+                .message("Get pitch success")
+                .result(pitchService.getAvailableTimeSlots(pitchId, dateBook))
                 .build();
 
         return ResponseEntity.ok().body(apiResponse);

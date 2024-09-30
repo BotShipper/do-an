@@ -14,5 +14,6 @@ public interface PitchService {
 
     PitchResponse getPitchById(long id);
 
-    PitchResponse getPitchByIdAndDate(long id, LocalDate date);
+    PitchResponse getAvailableTimeSlots(long id, LocalDate dateBook);
+
 }
